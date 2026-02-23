@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Load User</h1>
+    <button id="loadbtn">Load Btn</button>
+
+    <p id="status"></p>
+    <p id="user"></p>
+</body>
+
+<script>
+const loadBtn = document.getElementById("loadbtn");
+const statusText = document.getElementById("status");
+const userText = document.getElementById("user");
+
+function fetchRandomUser(){
+return new Promise((done, issue) => {
+    const sucess = true;
+    if (sucess) {
+        done({
+            name: "Uzzi",
+            title: "sales manager"
+
+
+
+        });
+    } else {
+        issue("Failed to fetch user")
+
+        
+
+    }
+   
+    
+    
+})
+}
+loadBtn.addEventListener("click", () => {
+    statusText.textContent = "Loading..."
+    fetchRandomUser()
+        .then(user => {
+            statusText.textContent = "User Loaded"
+            userText.textContent = `Name: ${user.name}, Title: ${user.title}`
+        })
+        .catch(error => {
+            statusText.textContent = error
+            userText.textContent = ""
+        })
+})
+
+</script>
+</html>

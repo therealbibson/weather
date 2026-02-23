@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Callback Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white flex items-center justify-center h-screen">
+
+    <div class="bg-gray-800 p-8 rounded-xl w-96 space-y-6">
+        <h1 class="text-xl font-bold text-center"> I know you use ai to do your assignment</h1>
+
+        <p id="status" class="text-center text-gray-300">
+            Waiting for action...
+        </p>
+
+        <div class="flex justify-between">
+            <button id="successBtn" class="px-4 py-2 bg-green-600 rounded">
+                Success
+            </button>
+
+            <button id="errorBtn" class="px-4 py-2 bg-red-600 rounded">
+                Error
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const statusText = document.getElementById("status");
+
+        // MAIN FUNCTION — controls the flow
+        function processAction(callback) {
+            statusText.textContent = "Processing...";
+            statusText.className = "text-center text-yellow-400";
+
+            // simulate delay (async behavior)
+            setTimeout(() => {
+                callback(); //  callback is executed HERE
+            }, 1500);
+        }
+
+        // CALLBACKS — just functions (entities)
+        function showSuccess() {
+            statusText.textContent = " Action successful!";
+            statusText.className = "text-center text-green-400";
+        }
+
+        function showError() {
+            statusText.textContent = " Something went wrong!";
+            statusText.className = "text-center text-red-400";
+        }
+
+        // EVENTS — browser controls WHEN
+        document.getElementById("successBtn").addEventListener("click", () => {
+            processAction(showSuccess);
+        });
+
+        document.getElementById("errorBtn").addEventListener("click", () => {
+            processAction(showError);
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Advanced Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 320px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input,
+        select,
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .result {
+            margin-top: 15px;
+            font-size: 1.2em;
+            color: #333;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .history {
+            margin-top: 15px;
+            font-size: 0.9em;
+            max-height: 150px;
+            overflow-y: auto;
+            color: #666;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 4px 0;
+            border-bottom: 1px solid #f9f9f9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculator">
+        <h3>JS Calculator Pro</h3>
+
+        <input type="number" id="num1" placeholder="First number">
+        <input type="number" id="num2" placeholder="Second number">
+
+        <select id="operator">
+            <option value="add">Add (+)</option>
+            <option value="subtract">Subtract (-)</option>
+            <option value="multiply">Multiply (*)</option>
+            <option value="divide">Divide (/)</option>
+            <option value="power">Power (^)</option>
+        </select>
+
+        <button onclick="calculate()">Calculate</button>
+
+        <div class="result" id="result">Result: 0</div>
+
+        <div class="history">
+            <strong>History:</strong>
+            <ul id="historyList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // 1. Storage for history
+        const history = [];
+
+        // 2. Object mapping for operations (Scalable & Clean)
+        const operations = {
+            add: (a, b) => a + b,
+            subtract: (a, b) => a - b,
+            multiply: (a, b) => a * b,
+            divide: (a, b) => b === 0 ? "Cannot divide by zero" : a / b,
+            power: (a, b) => Math.pow(a, b)
+        };
+
+        function calculate() {
+            const n1 = Number(document.getElementById("num1").value);
+            const n2 = Number(document.getElementById("num2").value);
+            const opKey = document.getElementById("operator").value;
+
+            // Execute operation using the object map
+            const answer = operations[opKey](n1, n2);
+
+            // Update UI
+            const resultEl = document.getElementById("result");
+            resultEl.innerHTML = `Result: ${answer}`;
+
+            // 3. Store in History Array
+            if (typeof answer === 'number') {
+                const timestamp = new Date().toLocaleTimeString();
+                const record = `${n1} ${opKey} ${n2} = ${answer.toFixed(2)}  (${timestamp})`;
+                history.push(record);
+                updateHistoryUI();
+            }
+        }
+
+        function updateHistoryUI() {
+            const list = document.getElementById("historyList");
+            // Use array method (map) to generate HTML
+            list.innerHTML = history.slice().reverse().map(item => `<li>${item}</li>`).join('');
+        }
+    </script>
+
+</body>
+
+</html>

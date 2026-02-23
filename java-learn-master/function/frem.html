@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Custom CSS with Tailwind JS Logic</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Manually styling the elements instead of using Tailwind utility classes in HTML */
+        body {
+            background-color: #f3f4f6;
+            padding: 40px;
+            font-family: sans-serif;
+        }
+
+        .my-product-card {
+            width: 320px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-black {
+            width: 100%;
+            background-color: black;
+            color: white;
+            padding: 8px 0;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 24px;">
+        🛒 Mini Shop — Custom CSS Start
+    </h2>
+
+    <div id="productCard" class="my-product-card">
+        <img src="https://via.placeholder.com/300" alt="Product" style="border-radius: 8px; margin-bottom: 12px;" />
+
+        <h3 style="font-size: 1.125rem; font-weight: 600;">Cool Sneakers</h3>
+        <p style="color: #4b5563; margin-bottom: 16px;">₦25,000</p>
+
+        <button id="addToCartBtn" class="btn-black">
+            Add to Cart
+        </button>
+
+        <button id="toggleColorBtn" class="btn-black bg-black">
+            Turn Green
+        </button>
+    </div>
+
+    <p style="margin-top: 24px; font-weight: bold;">
+        Cart Items: <span id="cartCount">0</span>
+    </p>
+
+    <script>
+        /* NO CHANGES MADE TO JAVASCRIPT */
+
+        const productCard = document.getElementById("productCard");
+        const addToCartBtn = document.getElementById("addToCartBtn");
+        const toggleColorBtn = document.getElementById("toggleColorBtn");
+        const cartCount = document.getElementById("cartCount");
+
+        let cartItems = 0;
+
+        function highlightCard() {
+            productCard.classList.add("bg-blue-100");
+        }
+
+        function removeHighlight() {
+            productCard.classList.remove("bg-blue-100");
+        }
+
+        function addToCart() {
+            cartItems++;
+            cartCount.textContent = cartItems;
+        }
+
+        function toggleButtonColor() {
+            // This still works because Tailwind is loaded in the <head>
+            toggleColorBtn.classList.toggle("bg-green-600");
+            toggleColorBtn.classList.toggle("bg-black");
+
+            if (toggleColorBtn.classList.contains("bg-green-600")) {
+                toggleColorBtn.innerHTML = "otilo";
+            } else {
+                toggleColorBtn.innerHTML = "mafoor";
+            }
+        }
+
+        productCard.addEventListener("mouseenter", highlightCard);
+        productCard.addEventListener("mouseleave", removeHighlight);
+        addToCartBtn.addEventListener("click", addToCart);
+        toggleColorBtn.addEventListener("click", toggleButtonColor);
+    </script>
+</body>
+
+</html>

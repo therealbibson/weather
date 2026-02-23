@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>callbac</title>
+</head>
+
+<body>
+    <h1>
+        callback example
+    </h1>
+    <p id="status">
+        waiting...
+    </p>
+
+    <button id="output">
+        Approve
+    </button>
+
+    <button id="errorBtn">
+        Error
+    </button>
+
+    <script>
+        const statusText = document.getElementById("status");
+        const outputBtn = document.getElementById("output");
+        const errorBtn = document.getElementById("errorBtn");
+
+
+
+        function showApprove() {
+            statusText.textContent = "Transaction Approved"
+        }
+        function showError() {
+            statusText.textContent = "Try Again"
+        }
+
+        function runcallback(process) {
+            statusText.textContent = "Processing..."
+            setTimeout(() => {
+                process()
+            }, 2000)
+        }
+
+        outputBtn.addEventListener("click", () => {
+            runcallback(showApprove)
+        })
+
+        errorBtn.addEventListener("click", () => {
+            runcallback(showError)
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>JS Functions with Tailwind & classList</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-10 font-sans">
+
+    <h2 class="text-2xl font-bold mb-6">🛒 Mini Shop — State-Aware Button</h2>
+
+    <!-- PRODUCT CARD -->
+    <div id="productCard" class="w-80 bg-white p-5 rounded-xl shadow-md transition-all duration-300">
+        <img src="https://via.placeholder.com/300" alt="Product" class="rounded-lg mb-3" />
+
+        <h3 class="text-lg font-semibold">Cool Sneakers</h3>
+        <p class="text-gray-600 mb-4">₦25,000</p>
+
+        <!-- ADD TO CART -->
+        <button id="addToCartBtn" class="w-full bg-black text-white py-2 rounded-md mb-3">
+            Add to Cart
+        </button>
+
+        <!-- COLOR TOGGLE BUTTON -->
+        <button id="toggleColorBtn" class="w-full bg-black text-white py-2 rounded-md">
+            Turn Green
+        </button>
+    </div>
+
+    <!-- CART DISPLAY -->
+    <p class="mt-6 font-bold">
+        Cart Items: <span id="cartCount">0</span>
+    </p>
+
+    <script>
+        /*
+        ============================
+        SELECTORS
+        ============================
+        */
+
+        const productCard = document.getElementById("productCard");
+        const addToCartBtn = document.getElementById("addToCartBtn");
+        const toggleColorBtn = document.getElementById("toggleColorBtn");
+        const cartCount = document.getElementById("cartCount");
+
+        /*
+        ============================
+        STATE
+        ============================
+        */
+
+        let cartItems = 0;
+
+        /*
+        ============================
+        FUNCTIONS
+        ============================
+        */
+
+        function highlightCard() {
+            productCard.classList.add("bg-blue-100");
+        }
+
+        function removeHighlight() {
+            productCard.classList.remove("bg-blue-100");
+        }
+
+        function addToCart() {
+            cartItems++;
+            cartCount.textContent = cartItems;
+        }
+
+        function toggleButtonColor() {
+            const isGreen = toggleColorBtn.classList.contains("bg-green-600");
+
+            if (isGreen) {
+                // BACK TO BLACK
+                toggleColorBtn.classList.remove("bg-green-600");
+                toggleColorBtn.classList.add("bg-black");
+                toggleColorBtn.textContent = "Turn Green";
+
+                productCard.classList.remove("bg-green-100");
+            } else {
+                // TURN GREEN
+                toggleColorBtn.classList.remove("bg-black");
+                toggleColorBtn.classList.add("bg-green-600");
+                toggleColorBtn.textContent = "Turn Black";
+
+                productCard.classList.add("bg-green-100");
+            }
+        }
+
+        /*
+        ============================
+        EVENT LISTENERS
+        ============================
+        */
+
+        productCard.addEventListener("mouseenter", highlightCard);
+        productCard.addEventListener("mouseleave", removeHighlight);
+
+        addToCartBtn.addEventListener("click", addToCart);
+        toggleColorBtn.addEventListener("click", toggleButtonColor);
+    </script>
+
+</body>
+
+</html>

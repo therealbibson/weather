@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-900 text-white p-5 text-center">
+
+    <h2 class="text-[50px] font-bold text-blue-500 font-mono mb-[50px]">Weather Forecast</h2>
+
+    <div>
+        
+        <div class="flex justify-center items-center gap-[20px] mb-[20px]">
+            <div>
+                <label for="city" class="text-[20px] font-bold font-mono text-blue-400">City:</label>
+            </div>
+            <div>
+                <input class="p-[5px_20px] bg-transparent border border-gray-500 mb-2 w-[300px]" type="text" id="city" name="city">
+                <button class="bg-blue-400 hover:bg-blue-700 animate-pulse text-white font-mono font-bold py-2 px-4 rounded w-[200px]" id="weatherBtn">Get Weather</button>
+            </div>
+        </div>
+
+        <div id="statusText"></div>
+
+        <div id="weatherResult"></div>
+
+        <div>
+            <h3 id="dailyForecast"></h3>
+            <ul id="weatherDetails"></ul>
+        </div>
+    </div>
+
+    <script>
+        const button = document.querySelector('#weatherBtn');
+        const cityInput = document.querySelector('#city');
+        const weatherResult = document.querySelector('#weatherResult');
+        const weatherDetails = document.querySelector('#weatherDetails');
+        const dailyForecast = document.querySelector('#dailyForecast');
+        const statusText = document.querySelector('#statusText');
+
+        function fetchWeather(city) {
+            return new Promise((resolve, reject) => {
+                fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=af80d32f7c2a66b410fe6b76b7897b83&units=metric`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.cod !== '200') {
+                            reject('City not found. Try again.');
+                        } else {
+                            resolve(data);
+                        }
+                    })
+                    .catch(error => {
+                        reject('Error fetching weather data.');
+                    });
+            });
+        }
+
+    
+        button.addEventListener('click', async () => {
+            const city = cityInput.value;
+
+            if (!city) {
+                statusText.textContent = 'Please enter a city name.';
+                return;
+            }
+
+            statusText.textContent = 'Loading...';
+            weatherResult.innerHTML = '';
+            weatherDetails.innerHTML = '';
+            dailyForecast.innerHTML = '';
+
+            try {
+                const data = await fetchWeather(city);
+
+                // Current weather
+                const current = data.list[0];
+                weatherResult.classList.add('mb-5', 'border-b-2', 'border-gray-500', 'p-5', 'text-center', 'w-[800px]', 'mx-auto');
+                weatherResult.innerHTML = `
+                    <p><span class="font-bold">Temperature:</span> ${current.main.temp}°C</p>
+                    <p><span class="font-bold">Weather:</span> ${current.weather[0].description}</p>
+                    <p><span class="font-bold">Humidity:</span> ${current.main.humidity}%</p>
+                `;
+
+                // 5-day forecast
+                const seenDays = new Set();
+
+                data.list.forEach(item => {
+                    const date = new Date(item.dt * 1000);
+                    const day = date.toDateString();
+                    const hour = date.getHours();
+
+                    if (!seenDays.has(day) && hour >= 11 && hour <= 14) {
+                        seenDays.add(day);
+
+                        weatherDetails.classList.add('flex', 'justify-center', 'gap-[50px]', 'mb-5', 'border-2', 'border-gray-500', 'p-5', 'text-center', 'w-[1100px]', 'mx-auto');
+                        const newWeatherDetails = document.createElement('li');
+                        newWeatherDetails.innerHTML = `
+                            <div class="text-blue-400 mb-[10px] font-mono"><p>${day}</p></div>
+                            <p><span class="font-bold">Weather:</span> ${item.weather[0].main}</p>
+                            <p><span class="font-bold">Temperature:</span> ${item.main.temp}°C</p>
+                            <p><span class="font-bold">Humidity:</span> ${item.main.humidity}%</p>
+                        `;
+                        weatherDetails.appendChild(newWeatherDetails);
+                    }
+                });
+
+                dailyForecast.innerHTML = '<p class="text-[20px] font-bold font-mono mb-2 text-blue-400">5-Day Forecast</p>';
+                statusText.innerHTML = `<p class="text-blue-400">Weather loaded <i class="fa-solid fa-check" style="color: rgb(0, 255, 0);"></i></p>`;
+
+            } catch (error) {
+                weatherResult.innerHTML = `<p>${error}</p>`;
+                statusText.innerHTML = `<p class="text-blue-400">Something went wrong <i class="fa-solid fa-xmark" style="color: rgb(255, 0, 0);"></i></p>`;
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+
+<!--
+```
+
+---
+
+Here's how the three things connect:
+```
+button clicked
+      ↓
+async () => { ... }          ← async handles the await
+      ↓
+await fetchWeather(city)     ← pauses and waits for the Promise
+      ↓
+  new Promise((resolve, reject) => {
+      fetch(url)
+        ├─ success + city found  → resolve(data)   → lands in try block
+        ├─ success + wrong city  → reject(message) → lands in catch block
+        └─ network failure       → reject(message) → lands in catch block
+  })
+-->

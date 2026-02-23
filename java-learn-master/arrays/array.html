@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Data Structures Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-8">
+
+    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Project Tasks</h1>
+
+        <div class="flex gap-2 mb-6">
+            <input type="text" id="taskInput" placeholder="Enter task name..."
+                class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="addTask()"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                Add Task
+            </button>
+        </div>
+
+        <ul id="taskList" class="space-y-3">
+        </ul>
+    </div>
+
+    <script>
+        // 1. THE DATA (An Array of Objects)
+        let tasks = [
+            { id: 1, text: "Learn JS Objects", completed: true },
+            { id: 2, text: "Master Tailwind CSS", completed: false }
+        ];
+
+        // 2. THE RENDER FUNCTION (Logic to show data on screen)
+        function renderTasks() {
+            const listElement = document.getElementById('taskList');
+            listElement.innerHTML = ''; // Clear current list
+
+            tasks.forEach((task) => {
+                // Create a list item using a Template Literal
+                const li = document.createElement('li');
+                li.className = `flex justify-between items-center p-3 rounded-lg ${task.completed ? 'bg-green-50' : 'bg-gray-50 border'}`;
+
+                li.innerHTML = `
+                    <span class="${task.completed ? 'line-through text-gray-400' : 'text-gray-700 font-medium'}">
+                        ${task.text}
+                    </span>
+                    <button onclick="toggleTask(${task.id})" 
+                            class="text-sm px-3 py-1 rounded ${task.completed ? 'bg-gray-200' : 'bg-green-500 text-white'}">
+                        ${task.completed ? 'Undo' : 'Complete'}
+                    </button>
+                `;
+                listElement.appendChild(li);
+            });
+        }
+
+        // 3. ADDING DATA (Pushing a new Object to the Array)
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            if (input.value.trim() === "") return;
+
+            const newTask = {
+                id: Date.now(), // Unique ID based on timestamp
+                text: input.value,
+                completed: false
+            };
+
+            tasks.push(newTask); // Adding to our Array
+            input.value = "";    // Clear input
+            renderTasks();       // Refresh UI
+        }
+
+        // 4. UPDATING DATA (Finding an Object in the Array)
+        function toggleTask(id) {
+            tasks = tasks.map(task => {
+                if (task.id === id) {
+                    return { ...task, completed: !task.completed }; // Toggle completed status
+                }
+                return task;
+            });
+            renderTasks(); // Refresh UI
+        }
+
+        // Initial render
+        renderTasks();
+    </script>
+</body>
+
+</html>

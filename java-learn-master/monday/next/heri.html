@@ -1,0 +1,124 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app-box" style="padding: 20px; border: 2px solid black; text-align: center;">
+        <h1 id="main-title">Control Center</h1>
+        <p id="description">Click the buttons to see the magic!</p>
+
+        <div id="button-grid">
+            <button onclick="updateText()">1. Change Text</button>
+            <button onclick="makeRed()">2. Red Theme</button>
+            <button onclick="makeBlue()">3. Blue Theme</button>
+            <button onclick="toggleBorder()">4. Toggle Border</button>
+            <button onclick="hideSection()">5. Hide Me</button>
+            <button onclick="showSection()">6. Show Me</button>
+            <button onclick="addEmoji()">7. Add Emoji</button>
+            <button onclick="increaseFont()">8. Bigger Font</button>
+            <button onclick="resetAll()">9. Reset All</button>
+            <button onclick="greetUser()">10. Greet</button>
+            <button onclick="showData()">11. Log Object</button>
+            <button onclick="addLog()">12. Save History</button>
+        </div>
+
+        <ul id="log-list"></ul>
+        <script>
+            // --- 1. THE DATA (Our "Storage Box") ---
+            const appInfo = {
+                name: "Magic Dashboard",
+                mode: "Learning"
+            };
+
+            const activityList = [];
+
+            // --- STYLE A: THE TRADITIONAL FUNCTION (Clear & Easy) ---
+            // Use this for your first 3 functions
+            function updateText() {
+                const title = document.getElementById("main-title");
+                title.innerText = "Text Changed!";
+            }
+
+            function makeRed() {
+                document.getElementById("app-box").style.backgroundColor = "lightcoral";
+            }
+
+            function makeBlue() {
+                document.getElementById("app-box").style.backgroundColor = "lightblue";
+            }
+
+            // --- STYLE B: THE ARROW FUNCTION (Modern & Short) ---
+            // Great for showing how "=>" replaces the word "function"
+            const toggleBorder = () => {
+                const box = document.getElementById("app-box");
+                // Using the ? (if) and : (else) we talked about!
+                box.style.border === "2px solid black" ?
+                    box.style.border = "5px solid gold" :
+                    box.style.border = "2px solid black";
+            };
+
+            const hideSection = () => document.getElementById("description").style.visibility = "hidden";
+            const showSection = () => document.getElementById("description").style.visibility = "visible";
+
+            // --- STYLE C: THE VARIABLE APPROACH (Storing Elements) ---
+            // This is "Easy" because we give the HTML element a nickname
+            function addEmoji() {
+                const screenTitle = document.getElementById("main-title");
+                screenTitle.innerText = screenTitle.innerText + " ✨";
+            }
+
+            function increaseFont() {
+                const text = document.getElementById("description");
+                text.style.fontSize = "25px";
+            }
+
+            // --- STYLE D: THE OBJECT WAY (Professional/Organized) ---
+            // We group related actions inside an object
+            const tools = {
+                reset: function () {
+                    location.reload();
+                },
+                greet: (userName) => {
+                    alert("Welcome, " + userName + "!");
+                }
+            };
+
+            // Calling the object methods for buttons 9 and 10
+            function resetAll() {
+                tools.reset();
+            }
+
+            function greetUser() {
+                const input = prompt("Enter Name:");
+                tools.greet(input);
+            }
+
+            // --- STYLE E: THE ARRAY LOVER (Button 11 & 12) ---
+            function showData() {
+                // Accessing an object property with a dot .
+                alert("This app is in " + appInfo.mode + " mode.");
+            }
+
+            function addLog() {
+                const now = new Date().toLocaleTimeString();
+
+                // 1. Add to Array
+                activityList.push("Clicked at: " + now);
+
+                // 2. Simple way to show the list (Beginner Friendly)
+                let listHTML = "";
+                activityList.forEach(function (item) {
+                    listHTML += "<li>" + item + "</li>";
+                });
+
+                document.getElementById("log-list").innerHTML = listHTML;
+            }
+        </script>
+    </div>
+</body>
+
+</html>
